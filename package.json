@@ -1,0 +1,17 @@
+{
+  "name": "tradesafe-access-manager-docs",
+  "version": "1.0.3",
+  "private": true,
+  "description": "TradeSafe Access Manager documentation site",
+  "scripts": {
+    "dev": "npx serve . -p 3456",
+    "capture": "node scripts/capture-screenshots.mjs",
+    "build": "echo 'Static site — no build step'",
+    "preview": "npx serve . -p 3456",
+    "test": "node scripts/test-docs.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.49.0",
+    "serve": "^14.2.4"
+  }
+}
