@@ -221,6 +221,84 @@ a { color: var(--qa-primary); }
 @media (max-width: 640px) {
 	.qa-summary__item { flex: 1 1 calc(50% - 8px); }
 }
+
+/* Chapter video player */
+.qa-chapter-player {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) 280px;
+	gap: 20px;
+	align-items: start;
+}
+
+.qa-chapter-player__now {
+	margin: 0 0 10px;
+	font-size: 15px;
+	font-weight: 600;
+	color: var(--qa-primary);
+}
+
+.qa-chapter-list {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	max-height: 520px;
+	overflow-y: auto;
+	padding: 4px;
+}
+
+.qa-chapter-btn {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	width: 100%;
+	text-align: left;
+	padding: 12px 14px;
+	border: 1px solid var(--qa-border);
+	border-radius: 10px;
+	background: var(--qa-card);
+	cursor: pointer;
+	font-family: inherit;
+	font-size: 14px;
+	color: var(--qa-text);
+	transition: border-color .15s, background .15s;
+}
+
+.qa-chapter-btn:hover {
+	border-color: #93c5fd;
+	background: #f8fafc;
+}
+
+.qa-chapter-btn.is-active {
+	border-color: var(--qa-primary);
+	background: #eff6ff;
+	box-shadow: 0 0 0 1px var(--qa-primary);
+}
+
+.qa-chapter-btn__num {
+	flex: 0 0 auto;
+	font-size: 12px;
+	font-weight: 700;
+	color: var(--qa-muted);
+	min-width: 22px;
+}
+
+.qa-chapter-btn.is-active .qa-chapter-btn__num {
+	color: var(--qa-primary);
+}
+
+.qa-chapter-btn__text {
+	font-weight: 500;
+	line-height: 1.35;
+}
+
+@media (max-width: 900px) {
+	.qa-chapter-player {
+		grid-template-columns: 1fr;
+	}
+	.qa-chapter-list {
+		max-height: none;
+	}
+}
 </style>
 </head>
 <body>
@@ -228,7 +306,7 @@ a { color: var(--qa-primary); }
 	<div class="qa-hero__inner">
 		<p class="qa-hero__eyebrow">End-to-End Quality Assurance</p>
 		<h1>TradeSafe Access Manager <span>v1.0.4</span></h1>
-		<p class="qa-hero__meta">Site: <a href="http://zeroday-access-manager.local">http://zeroday-access-manager.local</a> · Run: 2026-06-27T12:40:12.862Z</p>
+		<p class="qa-hero__meta">Site: <a href="http://zeroday-access-manager.local">http://zeroday-access-manager.local</a> · Run: 2026-06-27T14:21:03.358Z</p>
 		<div class="qa-summary">
 			<div class="qa-summary__item qa-summary__item--total"><strong>37</strong><span>Browser tests</span></div>
 			<div class="qa-summary__item qa-summary__item--pass"><strong>37</strong><span>Passed</span></div>
@@ -238,15 +316,98 @@ a { color: var(--qa-primary); }
 	</div>
 </header>
 <main class="qa-main">
+	
 	<section class="qa-section" id="video">
-		<h2>Full test recording</h2>
-		<p>Complete step-by-step browser walkthrough recorded during this QA run. Share this video with stakeholders for visual verification.</p>
-		<video class="qa-video" controls preload="metadata" poster="">
-			<source src="assets/video/e2e-qa-recording.webm" type="video/webm" />
-			Your browser does not support embedded video. <a href="assets/video/e2e-qa-recording.webm">Download the recording</a>.
-		</video>
-		<p class="qa-video__dl"><a href="assets/video/e2e-qa-recording.webm" download>Download video (.webm)</a></p>
+		<h2>Narrated test recording</h2>
+		<p>Watch part by part — each chapter opens with a full-screen title card, then the live test with natural voice narration synced to the video.</p>
+		<div class="qa-chapter-player">
+			<div class="qa-chapter-player__main">
+				<p class="qa-chapter-player__now" id="qa-chapter-now">REST API Health Check</p>
+				<video class="qa-video" id="qa-chapter-video" controls preload="metadata" playsinline>
+					<source src="assets/video/chapters/01-api.webm" type="video/webm" />
+				</video>
+			</div>
+			<nav class="qa-chapter-list" aria-label="Video chapters">
+		<button type="button" class="qa-chapter-btn is-active" data-chapter-src="assets/video/chapters/01-api.webm" data-chapter-title="REST API Health Check">
+			<span class="qa-chapter-btn__num">01</span>
+			<span class="qa-chapter-btn__text">REST API Health Check</span>
+		</button>
+		<button type="button" class="qa-chapter-btn" data-chapter-src="assets/video/chapters/02-plugin.webm" data-chapter-title="Plugin Installation">
+			<span class="qa-chapter-btn__num">02</span>
+			<span class="qa-chapter-btn__text">Plugin Installation</span>
+		</button>
+		<button type="button" class="qa-chapter-btn" data-chapter-src="assets/video/chapters/03-dashboard.webm" data-chapter-title="Access Manager Dashboard">
+			<span class="qa-chapter-btn__num">03</span>
+			<span class="qa-chapter-btn__text">Access Manager Dashboard</span>
+		</button>
+		<button type="button" class="qa-chapter-btn" data-chapter-src="assets/video/chapters/04-codes.webm" data-chapter-title="Codes Management">
+			<span class="qa-chapter-btn__num">04</span>
+			<span class="qa-chapter-btn__text">Codes Management</span>
+		</button>
+		<button type="button" class="qa-chapter-btn" data-chapter-src="assets/video/chapters/05-generate.webm" data-chapter-title="Generate Codes Process">
+			<span class="qa-chapter-btn__num">05</span>
+			<span class="qa-chapter-btn__text">Generate Codes Process</span>
+		</button>
+		<button type="button" class="qa-chapter-btn" data-chapter-src="assets/video/chapters/06-code-groups.webm" data-chapter-title="Code Groups">
+			<span class="qa-chapter-btn__num">06</span>
+			<span class="qa-chapter-btn__text">Code Groups</span>
+		</button>
+		<button type="button" class="qa-chapter-btn" data-chapter-src="assets/video/chapters/07-usage-logs.webm" data-chapter-title="Usage Logs">
+			<span class="qa-chapter-btn__num">07</span>
+			<span class="qa-chapter-btn__text">Usage Logs</span>
+		</button>
+		<button type="button" class="qa-chapter-btn" data-chapter-src="assets/video/chapters/08-user-lookup.webm" data-chapter-title="User Lookup">
+			<span class="qa-chapter-btn__num">08</span>
+			<span class="qa-chapter-btn__text">User Lookup</span>
+		</button>
+		<button type="button" class="qa-chapter-btn" data-chapter-src="assets/video/chapters/09-category-access.webm" data-chapter-title="Category Access">
+			<span class="qa-chapter-btn__num">09</span>
+			<span class="qa-chapter-btn__text">Category Access</span>
+		</button>
+		<button type="button" class="qa-chapter-btn" data-chapter-src="assets/video/chapters/10-settings.webm" data-chapter-title="Settings Configuration">
+			<span class="qa-chapter-btn__num">10</span>
+			<span class="qa-chapter-btn__text">Settings Configuration</span>
+		</button>
+		<button type="button" class="qa-chapter-btn" data-chapter-src="assets/video/chapters/11-frontend-preview.webm" data-chapter-title="Frontend Preview">
+			<span class="qa-chapter-btn__num">11</span>
+			<span class="qa-chapter-btn__text">Frontend Preview</span>
+		</button>
+		<button type="button" class="qa-chapter-btn" data-chapter-src="assets/video/chapters/12-storefront.webm" data-chapter-title="Storefront &amp; Customer Flow">
+			<span class="qa-chapter-btn__num">12</span>
+			<span class="qa-chapter-btn__text">Storefront &amp; Customer Flow</span>
+		</button></nav>
+		</div>
+		<p class="qa-video__dl">
+			<a href="assets/video/e2e-qa-recording-narrated.webm" download>Download full narrated video</a>
+			 · <a href="assets/video/e2e-qa-recording.webm" download>Raw recording (no voice)</a>
+		</p>
 	</section>
+	<script>
+	(function(){
+		const video = document.getElementById('qa-chapter-video');
+		const label = document.getElementById('qa-chapter-now');
+		const buttons = document.querySelectorAll('.qa-chapter-btn');
+		if (!video || !buttons.length) return;
+		buttons.forEach(function(btn){
+			btn.addEventListener('click', function(){
+				const src = btn.getAttribute('data-chapter-src');
+				const title = btn.getAttribute('data-chapter-title');
+				if (!src) return;
+				buttons.forEach(function(b){ b.classList.remove('is-active'); });
+				btn.classList.add('is-active');
+				if (label) label.textContent = title || '';
+				video.src = src;
+				video.load();
+				video.play().catch(function(){});
+			});
+		});
+		video.addEventListener('ended', function(){
+			const active = document.querySelector('.qa-chapter-btn.is-active');
+			const next = active && active.nextElementSibling;
+			if (next && next.classList.contains('qa-chapter-btn')) next.click();
+		});
+	})();
+	</script>
 	<section class="qa-section" id="cli">
 		<h2>CLI automated test suites</h2>
 		<div class="qa-table-wrap"><table class="qa-table"><thead><tr><th>Suite</th><th>Status</th><th>Detail</th></tr></thead><tbody>
@@ -400,7 +561,7 @@ a { color: var(--qa-primary); }
 					<span class="qa-test__badge">PASS</span>
 					<h3 class="qa-test__name">Live code generation (single access)</h3>
 				</div>
-				<p class="qa-test__detail">QAE2E-ZW6X-5A8D</p>
+				<p class="qa-test__detail">QAE2E-WWUA-RQ7J</p>
 				<figure class="qa-test__shot"><img src="assets/screenshots/011-generate-codes-success.png" alt="Live code generation (single access)" loading="lazy" /><figcaption>Live code generation (single access)</figcaption></figure>
 			</div>
 			<div class="qa-test qa-test--pass">

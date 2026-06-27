@@ -777,6 +777,8 @@ Open the <a href="e2e-qa/index.html"><strong>E2E QA Report</strong></a> for pass
 
 <h2>What is covered</h2>
 <ul>
+<li>12 narrated video chapters with full-screen title cards (part-by-part player)</li>
+<li>Natural voice walkthrough synced to each test section</li>
 <li>REST API health check</li>
 <li>All 9 TRADESAFE admin screens (dashboard, codes, generate, groups, logs, user lookup, category access, settings, frontend preview)</li>
 <li>Live code generation, settings save, user lookup search</li>

@@ -8,6 +8,8 @@ import { mkdir, writeFile, copyFile, readdir, stat } from 'fs/promises';
 import { spawn } from 'child_process';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { CHAPTERS } from './qa-chapters.mjs';
+import ffmpegStatic from 'ffmpeg-static';
 
 const __dirname = path.dirname( fileURLToPath( import.meta.url ) );
 const ROOT = path.join( __dirname, '..' );
@@ -34,10 +36,47 @@ const results = {
 	sections: [],
 	cliSuites: [],
 	video: 'assets/video/e2e-qa-recording.webm',
+	videoChapters: [],
+	videoChaptersBuilt: [],
 };
 
 let shotIndex = 0;
 let lastGeneratedCode = '';
+let videoClock = null;
+const videoChapters = [];
+
+const TITLE_CARD_MS = 4000;
+
+async function showChapterTitle( page, title, subtitle ) {
+	const html = `<!DOCTYPE html><html><head><meta charset="UTF-8" /><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" /><style>
+		*{box-sizing:border-box;margin:0;padding:0}
+		html,body{width:100%;height:100%;overflow:hidden}
+		body{font-family:Inter,system-ui,sans-serif;background:linear-gradient(145deg,#0f172a 0%,#1e3a8a 45%,#2563eb 100%);color:#fff;display:flex;align-items:center;justify-content:center}
+		.wrap{text-align:center;padding:48px;max-width:900px}
+		.eyebrow{font-size:13px;letter-spacing:.12em;text-transform:uppercase;opacity:.85;margin-bottom:20px;font-weight:600}
+		h1{font-size:clamp(36px,5vw,56px);font-weight:800;line-height:1.15;margin-bottom:16px}
+		p{font-size:clamp(16px,2vw,20px);opacity:.9;font-weight:500}
+		.badge{display:inline-block;margin-top:28px;padding:8px 16px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);font-size:13px}
+	</style></head><body><div class="wrap"><p class="eyebrow">TradeSafe Access Manager · E2E QA v${ VERSION }</p><h1>${ title.replace( /</g, '' ) }</h1><p>${ ( subtitle || '' ).replace( /</g, '' ) }</p><span class="badge">Quality Assurance Walkthrough</span></div></body></html>`;
+	await page.setContent( html, { waitUntil: 'domcontentloaded' } );
+	await page.waitForTimeout( TITLE_CARD_MS );
+}
+
+async function openChapter( page, id ) {
+	const ch = CHAPTERS.find( ( c ) => c.id === id );
+	if ( videoChapters.length && videoClock ) {
+		videoChapters[ videoChapters.length - 1 ].endMs = Date.now() - videoClock;
+	}
+	videoChapters.push( {
+		id,
+		displayTitle: ch?.displayTitle || id,
+		startMs: videoClock ? Date.now() - videoClock : 0,
+		endMs: null,
+	} );
+	if ( ch ) {
+		await showChapterTitle( page, ch.displayTitle, ch.subtitle );
+	}
+}
 
 function section( id, title ) {
 	const s = { id, title, tests: [] };
@@ -436,6 +475,63 @@ async function generateHtml() {
 		<tr><td>${ escapeHtml( s.name ) }</td><td class="qa-cli--${ s.status }">${ s.status.toUpperCase() }</td><td>${ escapeHtml( s.detail ) }</td></tr>`
 	).join( '' );
 
+	const chaptersHtml = ( results.videoChaptersBuilt || [] ).map( ( ch, i ) => `
+		<button type="button" class="qa-chapter-btn${ i === 0 ? ' is-active' : '' }" data-chapter-src="${ ch.video }" data-chapter-title="${ escapeHtml( ch.displayTitle ) }">
+			<span class="qa-chapter-btn__num">${ String( ch.index ).padStart( 2, '0' ) }</span>
+			<span class="qa-chapter-btn__text">${ escapeHtml( ch.displayTitle ) }</span>
+		</button>` ).join( '' );
+
+	const videoSection = ( results.videoChaptersBuilt || [] ).length ? `
+	<section class="qa-section" id="video">
+		<h2>Narrated test recording</h2>
+		<p>Watch part by part — each chapter opens with a full-screen title card, then the live test with natural voice narration synced to the video.</p>
+		<div class="qa-chapter-player">
+			<div class="qa-chapter-player__main">
+				<p class="qa-chapter-player__now" id="qa-chapter-now">${ escapeHtml( results.videoChaptersBuilt[0]?.displayTitle || '' ) }</p>
+				<video class="qa-video" id="qa-chapter-video" controls preload="metadata" playsinline>
+					<source src="${ results.videoChaptersBuilt[0]?.video || results.video }" type="video/webm" />
+				</video>
+			</div>
+			<nav class="qa-chapter-list" aria-label="Video chapters">${ chaptersHtml }</nav>
+		</div>
+		<p class="qa-video__dl">
+			<a href="${ results.video }" download>Download full narrated video</a>
+			${ results.videoRaw ? ` · <a href="${ results.videoRaw }" download>Raw recording (no voice)</a>` : '' }
+		</p>
+	</section>
+	<script>
+	(function(){
+		const video = document.getElementById('qa-chapter-video');
+		const label = document.getElementById('qa-chapter-now');
+		const buttons = document.querySelectorAll('.qa-chapter-btn');
+		if (!video || !buttons.length) return;
+		buttons.forEach(function(btn){
+			btn.addEventListener('click', function(){
+				const src = btn.getAttribute('data-chapter-src');
+				const title = btn.getAttribute('data-chapter-title');
+				if (!src) return;
+				buttons.forEach(function(b){ b.classList.remove('is-active'); });
+				btn.classList.add('is-active');
+				if (label) label.textContent = title || '';
+				video.src = src;
+				video.load();
+				video.play().catch(function(){});
+			});
+		});
+		video.addEventListener('ended', function(){
+			const active = document.querySelector('.qa-chapter-btn.is-active');
+			const next = active && active.nextElementSibling;
+			if (next && next.classList.contains('qa-chapter-btn')) next.click();
+		});
+	})();
+	</script>` : `
+	<section class="qa-section" id="video">
+		<h2>Full test recording</h2>
+		<p>Complete step-by-step browser walkthrough recorded during this QA run.</p>
+		<video class="qa-video" controls preload="metadata"><source src="${ results.video }" type="video/webm" /></video>
+		<p class="qa-video__dl"><a href="${ results.video }" download>Download video (.webm)</a></p>
+	</section>`;
+
 	const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -461,15 +557,7 @@ async function generateHtml() {
 	</div>
 </header>
 <main class="qa-main">
-	<section class="qa-section" id="video">
-		<h2>Full test recording</h2>
-		<p>Complete step-by-step browser walkthrough recorded during this QA run. Share this video with stakeholders for visual verification.</p>
-		<video class="qa-video" controls preload="metadata" poster="">
-			<source src="${ results.video }" type="video/webm" />
-			Your browser does not support embedded video. <a href="${ results.video }">Download the recording</a>.
-		</video>
-		<p class="qa-video__dl"><a href="${ results.video }" download>Download video (.webm)</a></p>
-	</section>
+	${ videoSection }
 	<section class="qa-section" id="cli">
 		<h2>CLI automated test suites</h2>
 		<div class="qa-table-wrap"><table class="qa-table"><thead><tr><th>Suite</th><th>Status</th><th>Detail</th></tr></thead><tbody>${ cliHtml }</tbody></table></div>
@@ -495,8 +583,11 @@ function escapeHtml( s ) {
 }
 
 async function compressVideo( input, output ) {
+	if ( ! ffmpegStatic ) {
+		return false;
+	}
 	return new Promise( ( resolve ) => {
-		const ff = spawn( 'ffmpeg', [
+		const ff = spawn( ffmpegStatic, [
 			'-y', '-i', input,
 			'-c:v', 'libx264', '-preset', 'fast', '-crf', '28',
 			'-movflags', '+faststart',
@@ -507,7 +598,25 @@ async function compressVideo( input, output ) {
 	} );
 }
 
+async function buildNarratedVideo() {
+	return new Promise( ( resolve, reject ) => {
+		const child = spawn( process.execPath, [ path.join( __dirname, 'build-narrated-video.mjs' ) ], {
+			stdio: 'inherit',
+		} );
+		child.on( 'close', ( code ) => ( 0 === code ? resolve() : reject( new Error( 'build-narrated-video failed' ) ) ) );
+		child.on( 'error', reject );
+	} );
+}
+
 async function main() {
+	if ( process.argv.includes( '--html-only' ) ) {
+		const data = JSON.parse( await import( 'fs/promises' ).then( ( fs ) => fs.readFile( path.join( OUT, 'results.json' ), 'utf8' ) ) );
+		Object.assign( results, data );
+		await generateHtml();
+		console.log( 'HTML report regenerated.' );
+		return;
+	}
+
 	console.log( '\n=== TradeSafe Access Manager E2E QA v' + VERSION + ' ===\n' );
 	await mkdir( SHOTS, { recursive: true } );
 	await mkdir( VIDEO_DIR, { recursive: true } );
@@ -522,56 +631,74 @@ async function main() {
 		recordVideo: { dir: VIDEO_DIR, size: { width: 1440, height: 900 } },
 	} );
 	const page = await context.newPage();
+	videoClock = Date.now();
 
 	console.log( '\nBrowser tests:\n' );
 
 	const s0 = section( 'api', '1. REST API & Plugin' );
+	await openChapter( page, 'api' );
 	await testApi( s0, page );
 
 	console.log( '\n— Plugin activation —' );
 	const s0b = section( 'plugin', '2. Plugin Installation' );
+	await openChapter( page, 'plugin' );
 	await login( page );
 	await testPluginActive( s0b, page );
 
 	console.log( '\n— Admin: Access Manager Dashboard —' );
 	const s1 = section( 'dashboard', '3. Access Manager Dashboard' );
+	await openChapter( page, 'dashboard' );
 	await testDashboard( s1, page );
 
 	console.log( '\n— Admin: Codes —' );
 	const s2 = section( 'codes', '4. Codes (search, filters, export, row actions)' );
+	await openChapter( page, 'codes' );
 	await testCodes( s2, page );
 
 	console.log( '\n— Admin: Generate Codes —' );
 	const s3 = section( 'generate', '5. Generate Codes (single, bulk, invite, live generation)' );
+	await openChapter( page, 'generate' );
 	await testGenerateCodes( s3, page );
 
 	console.log( '\n— Admin: Code Groups —' );
 	const s4 = section( 'code-groups', '6. Code Groups & Add New Group' );
+	await openChapter( page, 'code-groups' );
 	await testCodeGroups( s4, page );
 
 	console.log( '\n— Admin: Usage Logs —' );
 	const s5 = section( 'usage-logs', '7. Usage Logs' );
+	await openChapter( page, 'usage-logs' );
 	await testUsageLogs( s5, page );
 
 	console.log( '\n— Admin: User Lookup —' );
 	const s6 = section( 'user-lookup', '8. User Lookup' );
+	await openChapter( page, 'user-lookup' );
 	await testUserLookup( s6, page );
 
 	console.log( '\n— Admin: Category Access —' );
 	const s7 = section( 'category-access', '9. Category Access' );
+	await openChapter( page, 'category-access' );
 	await testCategoryAccess( s7, page );
 
 	console.log( '\n— Admin: Settings —' );
 	const s8 = section( 'settings', '10. Settings (roles, Ghost Mode, save)' );
+	await openChapter( page, 'settings' );
 	await testSettings( s8, page );
 
 	console.log( '\n— Admin: Frontend Preview —' );
 	const s9 = section( 'frontend-preview', '11. Frontend Preview' );
+	await openChapter( page, 'frontend-preview' );
 	await testFrontendPreview( s9, page );
 
 	console.log( '\n— Storefront —' );
 	const s10 = section( 'storefront', '12. Storefront (private site, registration, My Account Access, shop)' );
+	await openChapter( page, 'storefront' );
 	await testStorefront( s10, page, context );
+
+	if ( videoChapters.length && videoClock ) {
+		videoChapters[ videoChapters.length - 1 ].endMs = Date.now() - videoClock;
+	}
+	results.videoChapters = videoChapters;
 
 	const videoPath = await page.video()?.path();
 	await context.close();
@@ -604,6 +731,18 @@ async function main() {
 	}
 
 	results.meta.finishedAt = new Date().toISOString();
+	results.videoRaw = 'assets/video/e2e-qa-recording.webm';
+	await writeFile( path.join( OUT, 'results.json' ), JSON.stringify( results, null, 2 ), 'utf8' );
+
+	console.log( '\nBuilding narrated chapter videos…' );
+	try {
+		await buildNarratedVideo();
+		const updated = JSON.parse( await import( 'fs/promises' ).then( ( fs ) => fs.readFile( path.join( OUT, 'results.json' ), 'utf8' ) ) );
+		Object.assign( results, updated );
+	} catch ( err ) {
+		console.warn( 'Narrated video build skipped:', err.message );
+	}
+
 	await generateHtml();
 
 	console.log( '\n=== Summary ===' );

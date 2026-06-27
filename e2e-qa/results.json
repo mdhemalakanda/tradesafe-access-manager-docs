@@ -3,8 +3,8 @@
     "plugin": "TradeSafe Access Manager",
     "version": "1.0.4",
     "site": "http://zeroday-access-manager.local",
-    "startedAt": "2026-06-27T12:38:47.402Z",
-    "finishedAt": "2026-06-27T12:40:12.862Z"
+    "startedAt": "2026-06-27T14:18:42.081Z",
+    "finishedAt": "2026-06-27T14:21:03.358Z"
   },
   "summary": {
     "total": 37,
@@ -128,7 +128,7 @@
         {
           "name": "Live code generation (single access)",
           "status": "pass",
-          "detail": "QAE2E-ZW6X-5A8D",
+          "detail": "QAE2E-WWUA-RQ7J",
           "screenshot": "assets/screenshots/011-generate-codes-success.png"
         },
         {
@@ -370,5 +370,191 @@
       "detail": "CLI DB socket unavailable (browser tests cover this)"
     }
   ],
-  "video": "assets/video/e2e-qa-recording.webm"
+  "video": "assets/video/e2e-qa-recording-narrated.webm",
+  "videoChapters": [
+    {
+      "id": "api",
+      "displayTitle": "REST API Health Check",
+      "startMs": 0,
+      "endMs": 4445
+    },
+    {
+      "id": "plugin",
+      "displayTitle": "Plugin Installation",
+      "startMs": 4445,
+      "endMs": 12743
+    },
+    {
+      "id": "dashboard",
+      "displayTitle": "Access Manager Dashboard",
+      "startMs": 12743,
+      "endMs": 20112
+    },
+    {
+      "id": "codes",
+      "displayTitle": "Codes Management",
+      "startMs": 20112,
+      "endMs": 28696
+    },
+    {
+      "id": "generate",
+      "displayTitle": "Generate Codes Process",
+      "startMs": 28696,
+      "endMs": 39649
+    },
+    {
+      "id": "code-groups",
+      "displayTitle": "Code Groups",
+      "startMs": 39649,
+      "endMs": 49302
+    },
+    {
+      "id": "usage-logs",
+      "displayTitle": "Usage Logs",
+      "startMs": 49302,
+      "endMs": 55330
+    },
+    {
+      "id": "user-lookup",
+      "displayTitle": "User Lookup",
+      "startMs": 55330,
+      "endMs": 63868
+    },
+    {
+      "id": "category-access",
+      "displayTitle": "Category Access",
+      "startMs": 63868,
+      "endMs": 70775
+    },
+    {
+      "id": "settings",
+      "displayTitle": "Settings Configuration",
+      "startMs": 70775,
+      "endMs": 79979
+    },
+    {
+      "id": "frontend-preview",
+      "displayTitle": "Frontend Preview",
+      "startMs": 79979,
+      "endMs": 86138
+    },
+    {
+      "id": "storefront",
+      "displayTitle": "Storefront & Customer Flow",
+      "startMs": 86138,
+      "endMs": 134273
+    }
+  ],
+  "videoChaptersBuilt": [
+    {
+      "index": 1,
+      "id": "api",
+      "displayTitle": "REST API Health Check",
+      "subtitle": "TradeSafe Access Manager v1.0.4",
+      "narration": "We begin by verifying the plugin REST API. A request to the status endpoint confirms version one point zero point four is active and the service responds healthy.",
+      "video": "assets/video/chapters/01-api.webm",
+      "durationSec": 0
+    },
+    {
+      "index": 2,
+      "id": "plugin",
+      "displayTitle": "Plugin Installation",
+      "subtitle": "WordPress Plugins Screen",
+      "narration": "Next we confirm TradeSafe Access Manager is installed and activated on the WordPress plugins screen. The deactivate link proves the plugin is running correctly.",
+      "video": "assets/video/chapters/02-plugin.webm",
+      "durationSec": 0
+    },
+    {
+      "index": 3,
+      "id": "dashboard",
+      "displayTitle": "Access Manager Dashboard",
+      "subtitle": "Live Stats & Quick Actions",
+      "narration": "The Access Manager dashboard loads with eight live stat cards from the database. We switch through the Acceptance Criteria and Strategy tabs, and verify export buttons plus quick action shortcuts.",
+      "video": "assets/video/chapters/03-dashboard.webm",
+      "durationSec": 0
+    },
+    {
+      "index": 4,
+      "id": "codes",
+      "displayTitle": "Codes Management",
+      "subtitle": "Search, Filter & Export",
+      "narration": "On the Codes screen, the DataTables grid loads every stored code. We run a toolbar search, confirm CSV and TXT export buttons, and verify bulk disable, enable, and delete actions are available.",
+      "video": "assets/video/chapters/04-codes.webm",
+      "durationSec": 0
+    },
+    {
+      "index": 5,
+      "id": "generate",
+      "displayTitle": "Generate Codes Process",
+      "subtitle": "Single, Bulk & Invite Types",
+      "narration": "This is the Generate Codes workflow. We toggle bulk generation mode, preview the registration invite type, then live-generate a single access code with a Q A E two E prefix. The copy button confirms the code was saved to the database.",
+      "video": "assets/video/chapters/05-generate.webm",
+      "durationSec": 0
+    },
+    {
+      "index": 6,
+      "id": "code-groups",
+      "displayTitle": "Code Groups",
+      "subtitle": "Edit, Delete & Add New",
+      "narration": "Code Groups lists every preset with edit and delete on all rows. We search for TradeSafe, then open the Add New Group form to confirm create and edit flows are ready.",
+      "video": "assets/video/chapters/06-code-groups.webm",
+      "durationSec": 0
+    },
+    {
+      "index": 7,
+      "id": "usage-logs",
+      "displayTitle": "Usage Logs",
+      "subtitle": "Audit Trail & Filters",
+      "narration": "Usage Logs shows redemption attempts, rate limits, and admin audit entries. Event and result filters use Tom Select dropdowns, and the retention notice explains log storage policy.",
+      "video": "assets/video/chapters/07-usage-logs.webm",
+      "durationSec": 0
+    },
+    {
+      "index": 8,
+      "id": "user-lookup",
+      "displayTitle": "User Lookup",
+      "subtitle": "Profiles, Roles & Codes Used",
+      "narration": "User Lookup finds the admin account by username. The profile card shows roles, approved groups, add and remove role actions, and the codes used history table.",
+      "video": "assets/video/chapters/08-user-lookup.webm",
+      "durationSec": 0
+    },
+    {
+      "index": 9,
+      "id": "category-access",
+      "displayTitle": "Category Access",
+      "subtitle": "WooCommerce Role Mapping",
+      "narration": "Category Access maps WooCommerce categories to required access roles. The Ghost Mode warning is visible, and the Add Mapping modal opens with category and role selectors.",
+      "video": "assets/video/chapters/09-category-access.webm",
+      "durationSec": 0
+    },
+    {
+      "index": 10,
+      "id": "settings",
+      "displayTitle": "Settings Configuration",
+      "subtitle": "Roles, Ghost Mode & Save",
+      "narration": "Settings loads private site mode, invite requirements, product access roles, and Ghost Mode options. We save the form and confirm the success notice via AJAX persistence.",
+      "video": "assets/video/chapters/10-settings.webm",
+      "durationSec": 0
+    },
+    {
+      "index": 11,
+      "id": "frontend-preview",
+      "displayTitle": "Frontend Preview",
+      "subtitle": "Registration & Access Mockups",
+      "narration": "Frontend Preview displays mockup cards for private site redirect, registration, My Account Access, and notice examples. This screen is a visual reference for the live storefront flows.",
+      "video": "assets/video/chapters/11-frontend-preview.webm",
+      "durationSec": 0
+    },
+    {
+      "index": 12,
+      "id": "storefront",
+      "displayTitle": "Storefront & Customer Flow",
+      "subtitle": "Private Site, Access & Registration",
+      "narration": "On the storefront, logged-out visitors are redirected from the shop to login. After signing in, My Account Access shows the unlock form. We redeem a live access code and land on the protected category. Finally we confirm the registration invite field on the WooCommerce register page.",
+      "video": "assets/video/chapters/12-storefront.webm",
+      "durationSec": 0
+    }
+  ],
+  "videoRaw": "assets/video/e2e-qa-recording.webm",
+  "videoNarrated": "assets/video/e2e-qa-recording-narrated.webm"
 }
