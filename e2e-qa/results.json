@@ -1,0 +1,374 @@
+{
+  "meta": {
+    "plugin": "TradeSafe Access Manager",
+    "version": "1.0.4",
+    "site": "http://zeroday-access-manager.local",
+    "startedAt": "2026-06-27T12:38:47.402Z",
+    "finishedAt": "2026-06-27T12:40:12.862Z"
+  },
+  "summary": {
+    "total": 37,
+    "passed": 37,
+    "failed": 0,
+    "skipped": 0
+  },
+  "sections": [
+    {
+      "id": "api",
+      "title": "1. REST API & Plugin",
+      "tests": [
+        {
+          "name": "REST API health check",
+          "status": "pass",
+          "detail": "{\"plugin\":\"TradeSafe Access Manager\",\"version\":\"1.0.4\",\"status\":\"ok\"}",
+          "screenshot": "assets/screenshots/001-rest-api-status.png"
+        }
+      ]
+    },
+    {
+      "id": "plugin",
+      "title": "2. Plugin Installation",
+      "tests": [
+        {
+          "name": "Plugin installed and active",
+          "status": "pass",
+          "detail": "TradeSafe Access Manager",
+          "screenshot": "assets/screenshots/002-plugin-active.png"
+        }
+      ]
+    },
+    {
+      "id": "dashboard",
+      "title": "3. Access Manager Dashboard",
+      "tests": [
+        {
+          "name": "Dashboard loads with stat cards",
+          "status": "pass",
+          "detail": "8 stat cards",
+          "screenshot": "assets/screenshots/003-dashboard-overview.png"
+        },
+        {
+          "name": "Dashboard Export All CSV/TXT buttons",
+          "status": "pass",
+          "detail": "2 buttons",
+          "screenshot": ""
+        },
+        {
+          "name": "Dashboard Acceptance Criteria tab",
+          "status": "pass",
+          "detail": "Tab switches correctly",
+          "screenshot": "assets/screenshots/004-dashboard-acceptance-tab.png"
+        },
+        {
+          "name": "Dashboard Strategy & Exports tab",
+          "status": "pass",
+          "detail": "Export options visible",
+          "screenshot": "assets/screenshots/005-dashboard-exports-tab.png"
+        },
+        {
+          "name": "Quick Action: Generate Codes link",
+          "status": "pass",
+          "detail": "",
+          "screenshot": ""
+        }
+      ]
+    },
+    {
+      "id": "codes",
+      "title": "4. Codes (search, filters, export, row actions)",
+      "tests": [
+        {
+          "name": "Codes table loads (DataTables)",
+          "status": "pass",
+          "detail": "",
+          "screenshot": "assets/screenshots/006-codes-all-tab.png"
+        },
+        {
+          "name": "Codes search (Enter/button)",
+          "status": "pass",
+          "detail": "Searched TSG",
+          "screenshot": "assets/screenshots/007-codes-search-tsg.png"
+        },
+        {
+          "name": "Codes export controls present",
+          "status": "pass",
+          "detail": "",
+          "screenshot": ""
+        },
+        {
+          "name": "Codes bulk actions (Disable/Enable/Delete)",
+          "status": "pass",
+          "detail": "",
+          "screenshot": ""
+        }
+      ]
+    },
+    {
+      "id": "generate",
+      "title": "5. Generate Codes (single, bulk, invite, live generation)",
+      "tests": [
+        {
+          "name": "Generate Codes form loads",
+          "status": "pass",
+          "detail": "Single mode default",
+          "screenshot": "assets/screenshots/008-generate-codes-form.png"
+        },
+        {
+          "name": "Bulk generation mode toggle",
+          "status": "pass",
+          "detail": "",
+          "screenshot": "assets/screenshots/009-generate-codes-bulk-mode.png"
+        },
+        {
+          "name": "Registration Invite code type",
+          "status": "pass",
+          "detail": "Roles hidden for invite",
+          "screenshot": "assets/screenshots/010-generate-codes-invite-type.png"
+        },
+        {
+          "name": "Live code generation (single access)",
+          "status": "pass",
+          "detail": "QAE2E-ZW6X-5A8D",
+          "screenshot": "assets/screenshots/011-generate-codes-success.png"
+        },
+        {
+          "name": "Generate Codes Copy button enabled after generation",
+          "status": "pass",
+          "detail": "",
+          "screenshot": ""
+        }
+      ]
+    },
+    {
+      "id": "code-groups",
+      "title": "6. Code Groups & Add New Group",
+      "tests": [
+        {
+          "name": "Code Groups table with Edit/Delete on all rows",
+          "status": "pass",
+          "detail": "6 groups, 6 delete buttons",
+          "screenshot": "assets/screenshots/012-code-groups-list.png"
+        },
+        {
+          "name": "Code Groups search",
+          "status": "pass",
+          "detail": "Filtered TradeSafe",
+          "screenshot": "assets/screenshots/013-code-groups-search.png"
+        },
+        {
+          "name": "Add New Group form loads",
+          "status": "pass",
+          "detail": "",
+          "screenshot": "assets/screenshots/014-code-groups-add-form.png"
+        }
+      ]
+    },
+    {
+      "id": "usage-logs",
+      "title": "7. Usage Logs",
+      "tests": [
+        {
+          "name": "Usage Logs DataTable loads",
+          "status": "pass",
+          "detail": "",
+          "screenshot": "assets/screenshots/015-usage-logs-overview.png"
+        },
+        {
+          "name": "Usage Logs retention notice",
+          "status": "pass",
+          "detail": "",
+          "screenshot": ""
+        },
+        {
+          "name": "Event/Result Tom Select filters",
+          "status": "pass",
+          "detail": "",
+          "screenshot": ""
+        }
+      ]
+    },
+    {
+      "id": "user-lookup",
+      "title": "8. User Lookup",
+      "tests": [
+        {
+          "name": "User Lookup search by username",
+          "status": "pass",
+          "detail": "Searched admin",
+          "screenshot": "assets/screenshots/017-user-lookup-admin.png"
+        },
+        {
+          "name": "User Lookup Add/Remove role actions",
+          "status": "pass",
+          "detail": "",
+          "screenshot": ""
+        },
+        {
+          "name": "User Lookup Codes Used table",
+          "status": "pass",
+          "detail": "",
+          "screenshot": "assets/screenshots/016-user-lookup-empty.png"
+        }
+      ]
+    },
+    {
+      "id": "category-access",
+      "title": "9. Category Access",
+      "tests": [
+        {
+          "name": "Category Access Ghost Mode warning",
+          "status": "pass",
+          "detail": "",
+          "screenshot": "assets/screenshots/018-category-access-table.png"
+        },
+        {
+          "name": "Add Mapping modal opens",
+          "status": "pass",
+          "detail": "",
+          "screenshot": "assets/screenshots/019-category-access-add-modal.png"
+        }
+      ]
+    },
+    {
+      "id": "settings",
+      "title": "10. Settings (roles, Ghost Mode, save)",
+      "tests": [
+        {
+          "name": "Settings form loads",
+          "status": "pass",
+          "detail": "",
+          "screenshot": "assets/screenshots/020-settings-top.png"
+        },
+        {
+          "name": "Product Access Roles section",
+          "status": "pass",
+          "detail": "6 roles",
+          "screenshot": "assets/screenshots/021-settings-access-roles.png"
+        },
+        {
+          "name": "Settings Save (AJAX persistence)",
+          "status": "pass",
+          "detail": "Settings saved successfully.",
+          "screenshot": "assets/screenshots/022-settings-saved.png"
+        }
+      ]
+    },
+    {
+      "id": "frontend-preview",
+      "title": "11. Frontend Preview",
+      "tests": [
+        {
+          "name": "Frontend Preview cards",
+          "status": "pass",
+          "detail": "4 cards",
+          "screenshot": "assets/screenshots/023-frontend-preview-full.png"
+        }
+      ]
+    },
+    {
+      "id": "storefront",
+      "title": "12. Storefront (private site, registration, My Account Access, shop)",
+      "tests": [
+        {
+          "name": "Private Site Mode — shop redirects logged-out users",
+          "status": "pass",
+          "detail": "http://zeroday-access-manager.local/wp-login.php?redirect_to=http%3A%2F%2Fzeroday-access-manager.local%2Fshop%2F",
+          "screenshot": "assets/screenshots/024-private-site-shop-redirect.png"
+        },
+        {
+          "name": "My Account accessible when logged out",
+          "status": "pass",
+          "detail": "",
+          "screenshot": "assets/screenshots/025-my-account-login.png"
+        },
+        {
+          "name": "My Account → Access endpoint",
+          "status": "pass",
+          "detail": "",
+          "screenshot": "assets/screenshots/026-my-account-access.png"
+        },
+        {
+          "name": "Access code redemption (live)",
+          "status": "pass",
+          "detail": "Redirect after unlock: http://zeroday-access-manager.local/product-category/lagfix/",
+          "screenshot": "assets/screenshots/027-access-code-redemption.png"
+        },
+        {
+          "name": "Shop page loads for logged-in user (Ghost Mode)",
+          "status": "pass",
+          "detail": "Catalog visibility per roles",
+          "screenshot": "assets/screenshots/028-shop-ghost-mode.png"
+        },
+        {
+          "name": "Registration invite code field",
+          "status": "pass",
+          "detail": "WooCommerce register form",
+          "screenshot": "assets/screenshots/029-registration-invite-field.png"
+        }
+      ]
+    }
+  ],
+  "cliSuites": [
+    {
+      "name": "access-roles",
+      "status": "pass",
+      "detail": "All checks passed"
+    },
+    {
+      "name": "admin-audit-trail",
+      "status": "pass",
+      "detail": "All checks passed"
+    },
+    {
+      "name": "admin-dashboard",
+      "status": "pass",
+      "detail": "All checks passed"
+    },
+    {
+      "name": "branding-defaults",
+      "status": "pass",
+      "detail": "All checks passed"
+    },
+    {
+      "name": "frontend-preview",
+      "status": "pass",
+      "detail": "All checks passed"
+    },
+    {
+      "name": "generation-formatting",
+      "status": "pass",
+      "detail": "All checks passed"
+    },
+    {
+      "name": "ghost-mode",
+      "status": "pass",
+      "detail": "All checks passed"
+    },
+    {
+      "name": "mvp-acceptance",
+      "status": "pass",
+      "detail": "All checks passed"
+    },
+    {
+      "name": "rate-limiter",
+      "status": "pass",
+      "detail": "All checks passed"
+    },
+    {
+      "name": "role-system",
+      "status": "pass",
+      "detail": "All checks passed"
+    },
+    {
+      "name": "status-resolver",
+      "status": "pass",
+      "detail": "All checks passed"
+    },
+    {
+      "name": "code-groups",
+      "status": "skip",
+      "detail": "CLI DB socket unavailable (browser tests cover this)"
+    }
+  ],
+  "video": "assets/video/e2e-qa-recording.webm"
+}

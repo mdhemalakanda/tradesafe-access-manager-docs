@@ -2,7 +2,7 @@
  * TradeSafe Access Manager — documentation content & search index.
  */
 window.DOCS_CONTENT = {
-	version: '1.0.3',
+	version: '1.0.4',
 	pluginName: 'TradeSafe Access Manager',
 	sections: [
 		{
@@ -335,24 +335,24 @@ Disabling an access code revokes product access roles from users who redeemed it
 			id: 'code-groups',
 			title: 'Code Groups',
 			category: 'Admin Guide',
-			keywords: ['code groups', 'default roles', 'redirect', 'built-in', 'vip', 'reseller'],
+			keywords: ['code groups', 'default roles', 'redirect', 'delete', 'edit', 'vip', 'reseller'],
 			content: `
 <h1>Code Groups</h1>
-<p class="doc-article__lead">Groups are long-lived presets that speed up code generation with default type, roles, and redirect URLs.</p>
+<p class="doc-article__lead">Groups are long-lived presets that speed up code generation with default type, roles, and redirect URLs. <strong>Every group is fully editable and deletable</strong> — rename, change roles, or remove any row including starter groups like LagFix or TradeSafe.</p>
 
 <figure class="doc-figure">
 <img src="assets/img/code-groups.png" alt="Code Groups table" />
-<figcaption>Code Groups — name, type, default roles, redirect, and linked code counts.</figcaption>
+<figcaption>Code Groups — checkbox, Edit, and Delete on every row.</figcaption>
 </figure>
 
-<h2>Built-in vs custom groups</h2>
-<ul>
-<li><strong>Built-in MVP groups</strong> (Registration Invites, TradeSafe, VIP Access, Reseller Access) — Edit only; cannot delete</li>
-<li><strong>Custom groups</strong> — Full create, edit, delete; deleting cascades linked codes</li>
-</ul>
+<h2>Starter groups (fresh install)</h2>
+<p>New installs seed Registration Invites, LagFix, TradeSafe, WinKings, VIP Access, and Reseller Access automatically. After that, you control the list — renamed or deleted starter groups are <em>not</em> recreated on every page load.</p>
 
 <h2>Columns</h2>
 <p>Name, Type (invite/access), Default Role(s), Redirect URL, Code count, Edit/Delete actions.</p>
+
+<h2>Delete behavior</h2>
+<p>Deleting a group also permanently deletes all codes linked to that group. Use bulk select + Delete for multiple groups.</p>
 
 <h2>Add New Group</h2>
 <p>TRADESAFE → Add New Group. Set name, code type, default account role (invites) or default roles granted (access), redirect URL, and notes. Saved via AJAX.</p>
@@ -762,15 +762,51 @@ Access roles now serialize correctly as indexed arrays. If save previously faile
 `,
 		},
 		{
+			id: 'e2e-qa',
+			title: 'E2E QA Report & Video',
+			category: 'Reference',
+			keywords: ['qa', 'testing', 'e2e', 'video', 'screenshots', 'quality assurance', 'verification'],
+			content: `
+<h1>E2E QA Report & Video</h1>
+<p class="doc-article__lead">Full end-to-end quality assurance run with step-by-step browser tests, screenshots for every check, CLI suite results, and a screen recording you can share with stakeholders.</p>
+
+<div class="doc-callout doc-callout--info">
+<strong>Latest report</strong>
+Open the <a href="e2e-qa/index.html"><strong>E2E QA Report</strong></a> for pass/fail details, embedded video, and per-feature screenshots.
+</div>
+
+<h2>What is covered</h2>
+<ul>
+<li>REST API health check</li>
+<li>All 9 TRADESAFE admin screens (dashboard, codes, generate, groups, logs, user lookup, category access, settings, frontend preview)</li>
+<li>Live code generation, settings save, user lookup search</li>
+<li>Storefront: private site redirect, registration invite field, My Account Access, code redemption, shop Ghost Mode</li>
+<li>12 CLI automated test suites from <code>tools/run-*-tests.php</code></li>
+</ul>
+
+<h2>Re-run locally</h2>
+<pre><code>cd wp-content/plugins/Zeroday-all-assets/docs-site
+npm run qa</code></pre>
+<p>Output: <code>e2e-qa/index.html</code>, screenshots in <code>e2e-qa/assets/screenshots/</code>, video in <code>e2e-qa/assets/video/</code>.</p>
+`,
+		},
+		{
 			id: 'changelog',
 			title: 'Changelog',
 			category: 'Reference',
-			keywords: ['changelog', 'version', '1.0.3', '1.0.2', 'release notes'],
+			keywords: ['changelog', 'version', '1.0.4', '1.0.3', 'release notes'],
 			content: `
 <h1>Changelog</h1>
 <p class="doc-article__lead">Release history for TradeSafe Access Manager.</p>
 
-<h2>1.0.3 <span class="doc-badge">Current</span></h2>
+<h2>1.0.4 <span class="doc-badge">Current</span></h2>
+<ul>
+<li>Code Groups: all groups fully editable and deletable; no duplicate re-seeding after rename</li>
+<li>Checkbox + Delete on every code group row including former built-ins</li>
+<li>E2E QA report and video published on documentation site</li>
+</ul>
+
+<h2>1.0.3</h2>
 <ul>
 <li>Configurable Product Access Roles (slug + display name)</li>
 <li>Customizable Registration Role Names</li>

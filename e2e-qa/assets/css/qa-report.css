@@ -1,0 +1,215 @@
+:root {
+	--qa-bg: #f4f6f9;
+	--qa-card: #fff;
+	--qa-text: #1e293b;
+	--qa-muted: #64748b;
+	--qa-border: #e2e8f0;
+	--qa-pass: #059669;
+	--qa-fail: #dc2626;
+	--qa-skip: #d97706;
+	--qa-primary: #2563eb;
+}
+
+* { box-sizing: border-box; }
+
+body {
+	margin: 0;
+	font-family: Inter, system-ui, -apple-system, sans-serif;
+	background: var(--qa-bg);
+	color: var(--qa-text);
+	line-height: 1.55;
+}
+
+a { color: var(--qa-primary); }
+
+.qa-hero {
+	background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 55%, #3b82f6 100%);
+	color: #fff;
+	padding: 48px 24px 56px;
+}
+
+.qa-hero__inner { max-width: 1100px; margin: 0 auto; }
+
+.qa-hero__eyebrow {
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	font-size: 12px;
+	font-weight: 600;
+	opacity: 0.85;
+	margin: 0 0 8px;
+}
+
+.qa-hero h1 {
+	margin: 0 0 12px;
+	font-size: clamp(1.75rem, 4vw, 2.5rem);
+	font-weight: 800;
+}
+
+.qa-hero h1 span { font-weight: 600; opacity: 0.9; }
+
+.qa-hero__meta { margin: 0 0 28px; opacity: 0.9; font-size: 14px; }
+.qa-hero__meta a { color: #fff; }
+
+.qa-summary {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 16px;
+}
+
+.qa-summary__item {
+	background: rgba(255, 255, 255, 0.12);
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	border-radius: 12px;
+	padding: 16px 24px;
+	min-width: 120px;
+}
+
+.qa-summary__item strong {
+	display: block;
+	font-size: 2rem;
+	font-weight: 800;
+	line-height: 1;
+	margin-bottom: 4px;
+}
+
+.qa-summary__item span { font-size: 13px; opacity: 0.85; }
+
+.qa-main {
+	max-width: 1100px;
+	margin: 0 auto;
+	padding: 32px 24px 64px;
+}
+
+.qa-section {
+	margin-bottom: 40px;
+}
+
+.qa-section h2 {
+	font-size: 1.35rem;
+	font-weight: 700;
+	margin: 0 0 16px;
+	padding-bottom: 8px;
+	border-bottom: 2px solid var(--qa-border);
+}
+
+.qa-video {
+	width: 100%;
+	max-height: 70vh;
+	border-radius: 12px;
+	background: #000;
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+.qa-video__dl { margin-top: 12px; font-size: 14px; }
+
+.qa-table-wrap {
+	overflow-x: auto;
+	background: var(--qa-card);
+	border: 1px solid var(--qa-border);
+	border-radius: 12px;
+}
+
+.qa-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 14px;
+}
+
+.qa-table th,
+.qa-table td {
+	padding: 12px 16px;
+	text-align: left;
+	border-bottom: 1px solid var(--qa-border);
+}
+
+.qa-table th {
+	background: #f8fafc;
+	font-weight: 600;
+}
+
+.qa-cli--pass { color: var(--qa-pass); font-weight: 600; }
+.qa-cli--fail { color: var(--qa-fail); font-weight: 600; }
+.qa-cli--skip { color: var(--qa-skip); font-weight: 600; }
+
+.qa-tests {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.qa-test {
+	background: var(--qa-card);
+	border: 1px solid var(--qa-border);
+	border-radius: 12px;
+	padding: 20px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.qa-test--pass { border-left: 4px solid var(--qa-pass); }
+.qa-test--fail { border-left: 4px solid var(--qa-fail); }
+.qa-test--skip { border-left: 4px solid var(--qa-skip); }
+
+.qa-test__head {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin-bottom: 8px;
+}
+
+.qa-test__badge {
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.04em;
+	padding: 4px 8px;
+	border-radius: 6px;
+	background: #f1f5f9;
+}
+
+.qa-test--pass .qa-test__badge { background: #d1fae5; color: var(--qa-pass); }
+.qa-test--fail .qa-test__badge { background: #fee2e2; color: var(--qa-fail); }
+.qa-test--skip .qa-test__badge { background: #fef3c7; color: var(--qa-skip); }
+
+.qa-test__name {
+	margin: 0;
+	font-size: 1rem;
+	font-weight: 600;
+}
+
+.qa-test__detail {
+	margin: 0 0 12px;
+	font-size: 14px;
+	color: var(--qa-muted);
+	font-family: ui-monospace, monospace;
+	word-break: break-word;
+}
+
+.qa-test__shot {
+	margin: 12px 0 0;
+}
+
+.qa-test__shot img {
+	width: 100%;
+	height: auto;
+	border: 1px solid var(--qa-border);
+	border-radius: 8px;
+	display: block;
+}
+
+.qa-test__shot figcaption {
+	margin-top: 8px;
+	font-size: 13px;
+	color: var(--qa-muted);
+}
+
+.qa-footer {
+	text-align: center;
+	padding: 24px;
+	font-size: 14px;
+	color: var(--qa-muted);
+	border-top: 1px solid var(--qa-border);
+	background: var(--qa-card);
+}
+
+@media (max-width: 640px) {
+	.qa-summary__item { flex: 1 1 calc(50% - 8px); }
+}

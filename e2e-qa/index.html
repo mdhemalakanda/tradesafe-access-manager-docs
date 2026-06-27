@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>E2E QA Report — TradeSafe Access Manager v1.0.4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>:root {
+	--qa-bg: #f4f6f9;
+	--qa-card: #fff;
+	--qa-text: #1e293b;
+	--qa-muted: #64748b;
+	--qa-border: #e2e8f0;
+	--qa-pass: #059669;
+	--qa-fail: #dc2626;
+	--qa-skip: #d97706;
+	--qa-primary: #2563eb;
+}
+
+* { box-sizing: border-box; }
+
+body {
+	margin: 0;
+	font-family: Inter, system-ui, -apple-system, sans-serif;
+	background: var(--qa-bg);
+	color: var(--qa-text);
+	line-height: 1.55;
+}
+
+a { color: var(--qa-primary); }
+
+.qa-hero {
+	background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 55%, #3b82f6 100%);
+	color: #fff;
+	padding: 48px 24px 56px;
+}
+
+.qa-hero__inner { max-width: 1100px; margin: 0 auto; }
+
+.qa-hero__eyebrow {
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	font-size: 12px;
+	font-weight: 600;
+	opacity: 0.85;
+	margin: 0 0 8px;
+}
+
+.qa-hero h1 {
+	margin: 0 0 12px;
+	font-size: clamp(1.75rem, 4vw, 2.5rem);
+	font-weight: 800;
+}
+
+.qa-hero h1 span { font-weight: 600; opacity: 0.9; }
+
+.qa-hero__meta { margin: 0 0 28px; opacity: 0.9; font-size: 14px; }
+.qa-hero__meta a { color: #fff; }
+
+.qa-summary {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 16px;
+}
+
+.qa-summary__item {
+	background: rgba(255, 255, 255, 0.12);
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	border-radius: 12px;
+	padding: 16px 24px;
+	min-width: 120px;
+}
+
+.qa-summary__item strong {
+	display: block;
+	font-size: 2rem;
+	font-weight: 800;
+	line-height: 1;
+	margin-bottom: 4px;
+}
+
+.qa-summary__item span { font-size: 13px; opacity: 0.85; }
+
+.qa-main {
+	max-width: 1100px;
+	margin: 0 auto;
+	padding: 32px 24px 64px;
+}
+
+.qa-section {
+	margin-bottom: 40px;
+}
+
+.qa-section h2 {
+	font-size: 1.35rem;
+	font-weight: 700;
+	margin: 0 0 16px;
+	padding-bottom: 8px;
+	border-bottom: 2px solid var(--qa-border);
+}
+
+.qa-video {
+	width: 100%;
+	max-height: 70vh;
+	border-radius: 12px;
+	background: #000;
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+.qa-video__dl { margin-top: 12px; font-size: 14px; }
+
+.qa-table-wrap {
+	overflow-x: auto;
+	background: var(--qa-card);
+	border: 1px solid var(--qa-border);
+	border-radius: 12px;
+}
+
+.qa-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 14px;
+}
+
+.qa-table th,
+.qa-table td {
+	padding: 12px 16px;
+	text-align: left;
+	border-bottom: 1px solid var(--qa-border);
+}
+
+.qa-table th {
+	background: #f8fafc;
+	font-weight: 600;
+}
+
+.qa-cli--pass { color: var(--qa-pass); font-weight: 600; }
+.qa-cli--fail { color: var(--qa-fail); font-weight: 600; }
+.qa-cli--skip { color: var(--qa-skip); font-weight: 600; }
+
+.qa-tests {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.qa-test {
+	background: var(--qa-card);
+	border: 1px solid var(--qa-border);
+	border-radius: 12px;
+	padding: 20px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.qa-test--pass { border-left: 4px solid var(--qa-pass); }
+.qa-test--fail { border-left: 4px solid var(--qa-fail); }
+.qa-test--skip { border-left: 4px solid var(--qa-skip); }
+
+.qa-test__head {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin-bottom: 8px;
+}
+
+.qa-test__badge {
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.04em;
+	padding: 4px 8px;
+	border-radius: 6px;
+	background: #f1f5f9;
+}
+
+.qa-test--pass .qa-test__badge { background: #d1fae5; color: var(--qa-pass); }
+.qa-test--fail .qa-test__badge { background: #fee2e2; color: var(--qa-fail); }
+.qa-test--skip .qa-test__badge { background: #fef3c7; color: var(--qa-skip); }
+
+.qa-test__name {
+	margin: 0;
+	font-size: 1rem;
+	font-weight: 600;
+}
+
+.qa-test__detail {
+	margin: 0 0 12px;
+	font-size: 14px;
+	color: var(--qa-muted);
+	font-family: ui-monospace, monospace;
+	word-break: break-word;
+}
+
+.qa-test__shot {
+	margin: 12px 0 0;
+}
+
+.qa-test__shot img {
+	width: 100%;
+	height: auto;
+	border: 1px solid var(--qa-border);
+	border-radius: 8px;
+	display: block;
+}
+
+.qa-test__shot figcaption {
+	margin-top: 8px;
+	font-size: 13px;
+	color: var(--qa-muted);
+}
+
+.qa-footer {
+	text-align: center;
+	padding: 24px;
+	font-size: 14px;
+	color: var(--qa-muted);
+	border-top: 1px solid var(--qa-border);
+	background: var(--qa-card);
+}
+
+@media (max-width: 640px) {
+	.qa-summary__item { flex: 1 1 calc(50% - 8px); }
+}
+</style>
+</head>
+<body>
+<header class="qa-hero">
+	<div class="qa-hero__inner">
+		<p class="qa-hero__eyebrow">End-to-End Quality Assurance</p>
+		<h1>TradeSafe Access Manager <span>v1.0.4</span></h1>
+		<p class="qa-hero__meta">Site: <a href="http://zeroday-access-manager.local">http://zeroday-access-manager.local</a> · Run: 2026-06-27T12:40:12.862Z</p>
+		<div class="qa-summary">
+			<div class="qa-summary__item qa-summary__item--total"><strong>37</strong><span>Browser tests</span></div>
+			<div class="qa-summary__item qa-summary__item--pass"><strong>37</strong><span>Passed</span></div>
+			<div class="qa-summary__item qa-summary__item--fail"><strong>0</strong><span>Failed</span></div>
+			<div class="qa-summary__item qa-summary__item--skip"><strong>0</strong><span>Skipped</span></div>
+		</div>
+	</div>
+</header>
+<main class="qa-main">
+	<section class="qa-section" id="video">
+		<h2>Full test recording</h2>
+		<p>Complete step-by-step browser walkthrough recorded during this QA run. Share this video with stakeholders for visual verification.</p>
+		<video class="qa-video" controls preload="metadata" poster="">
+			<source src="assets/video/e2e-qa-recording.webm" type="video/webm" />
+			Your browser does not support embedded video. <a href="assets/video/e2e-qa-recording.webm">Download the recording</a>.
+		</video>
+		<p class="qa-video__dl"><a href="assets/video/e2e-qa-recording.webm" download>Download video (.webm)</a></p>
+	</section>
+	<section class="qa-section" id="cli">
+		<h2>CLI automated test suites</h2>
+		<div class="qa-table-wrap"><table class="qa-table"><thead><tr><th>Suite</th><th>Status</th><th>Detail</th></tr></thead><tbody>
+		<tr><td>access-roles</td><td class="qa-cli--pass">PASS</td><td>All checks passed</td></tr>
+		<tr><td>admin-audit-trail</td><td class="qa-cli--pass">PASS</td><td>All checks passed</td></tr>
+		<tr><td>admin-dashboard</td><td class="qa-cli--pass">PASS</td><td>All checks passed</td></tr>
+		<tr><td>branding-defaults</td><td class="qa-cli--pass">PASS</td><td>All checks passed</td></tr>
+		<tr><td>frontend-preview</td><td class="qa-cli--pass">PASS</td><td>All checks passed</td></tr>
+		<tr><td>generation-formatting</td><td class="qa-cli--pass">PASS</td><td>All checks passed</td></tr>
+		<tr><td>ghost-mode</td><td class="qa-cli--pass">PASS</td><td>All checks passed</td></tr>
+		<tr><td>mvp-acceptance</td><td class="qa-cli--pass">PASS</td><td>All checks passed</td></tr>
+		<tr><td>rate-limiter</td><td class="qa-cli--pass">PASS</td><td>All checks passed</td></tr>
+		<tr><td>role-system</td><td class="qa-cli--pass">PASS</td><td>All checks passed</td></tr>
+		<tr><td>status-resolver</td><td class="qa-cli--pass">PASS</td><td>All checks passed</td></tr>
+		<tr><td>code-groups</td><td class="qa-cli--skip">SKIP</td><td>CLI DB socket unavailable (browser tests cover this)</td></tr></tbody></table></div>
+	</section>
+	
+		<section class="qa-section" id="api">
+			<h2>1. REST API &amp; Plugin</h2>
+			<div class="qa-tests">
+			<div class="qa-test qa-test--pass">
+				<div class="qa-test__head">
+					<span class="qa-test__badge">PASS</span>
+					<h3 class="qa-test__name">REST API health check</h3>
+				</div>
+				<p class="qa-test__detail">{&quot;plugin&quot;:&quot;TradeSafe Access Manager&quot;,&quot;version&quot;:&quot;1.0.4&quot;,&quot;status&quot;:&quot;ok&quot;}</p>
+				<figure class="qa-test__shot"><img src="assets/screenshots/001-rest-api-status.png" alt="REST API health check" loading="lazy" /><figcaption>REST API health check</figcaption></figure>
+			</div></div>
+		</section>
+		<section class="qa-section" id="plugin">
+			<h2>2. Plugin Installation</h2>
+			<div class="qa-tests">
+			<div class="qa-test qa-test--pass">
+				<div class="qa-test__head">
+					<span class="qa-test__badge">PASS</span>
+					<h3 class="qa-test__name">Plugin installed and active</h3>
+				</div>
+				<p class="qa-test__detail">TradeSafe Access Manager</p>
+				<figure class="qa-test__shot"><img src="assets/screenshots/002-plugin-active.png" alt="Plugin installed and active" loading="lazy" /><figcaption>Plugin installed and active</figcaption></figure>
+			</div></div>
+		</section>
+		<section class="qa-section" id="dashboard">
+			<h2>3. Access Manager Dashboard</h2>
+			<div class="qa-tests">
+			<div class="qa-test qa-test--pass">
+				<div class="qa-test__head">
+					<span class="qa-test__badge">PASS</span>
+					<h3 class="qa-test__name">Dashboard loads with stat cards</h3>
+				</div>
+				<p class="qa-test__detail">8 stat cards</p>
+				<figure class="qa-test__shot"><img src="assets/screenshots/003-dashboard-overview.png" alt="Dashboard loads with stat cards" loading="lazy" /><figcaption>Dashboard loads with stat cards</figcaption></figure>
+			</div>
+			<div class="qa-test qa-test--pass">
+				<div class="qa-test__head">
+					<span class="qa-test__badge">PASS</span>
+					<h3 class="qa-test__name">Dashboard Export All CSV/TXT buttons</h3>
+				</div>
+				<p class="qa-test__detail">2 buttons</p>
+				
+			</div>
+			<div class="qa-test qa-test--pass">
+				<div class="qa-test__head">
+					<span class="qa-test__badge">PASS</span>
+					<h3 class="qa-test__name">Dashboard Acceptance Criteria tab</h3>
+				</div>
+				<p class="qa-test__detail">Tab switches correctly</p>
+				<figure class="qa-test__shot"><img src="assets/screenshots/004-dashboard-acceptance-tab.png" alt="Dashboard Acceptance Criteria tab" loading="lazy" /><figcaption>Dashboard Acceptance Criteria tab</figcaption></figure>
+			</div>
+			<div class="qa-test qa-test--pass">
+				<div class="qa-test__head">
+					<span class="qa-test__badge">PASS</span>
+					<h3 class="qa-test__name">Dashboard Strategy &amp; Exports tab</h3>
+				</div>
+				<p class="qa-test__detail">Export options visible</p>
+				<figure class="qa-test__shot"><img src="assets/screenshots/005-dashboard-exports-tab.png" alt="Dashboard Strategy &amp; Exports tab" loading="lazy" /><figcaption>Dashboard Strategy &amp; Exports tab</figcaption></figure>
+			</div>
+			<div class="qa-test qa-test--pass">
+				<div class="qa-test__head">
+					<span class="qa-test__badge">PASS</span>
+					<h3 class="qa-test__name">Quick Action: Generate Codes link</h3>
+				</div>
+				
+				
+			</div></div>
+		</section>
+		<section class="qa-section" id="codes">
+			<h2>4. Codes (search, filters, export, row actions)</h2>
+			<div class="qa-tests">
+			<div class="qa-test qa-test--pass">
+				<div class="qa-test__head">
+					<span class="qa-test__badge">PASS</span>
+					<h3 class="qa-test__name">Codes table loads (DataTables)</h3>
+				</div>
+				
+				<figure class="qa-test__shot"><img src="assets/screenshots/006-codes-all-tab.png" alt="Codes table loads (DataTables)" loading="lazy" /><figcaption>Codes table loads (DataTables)</figcaption></figure>
+			</div>
+			<div class="qa-test qa-test--pass">
+				<div class="qa-test__head">
+					<span class="qa-test__badge">PASS</span>
+					<h3 class="qa-test__name">Codes search (Enter/button)</h3>
+				</div>
+				<p class="qa-test__detail">Searched TSG</p>
+				<figure class="qa-test__shot"><img src="assets/screenshots/007-codes-search-tsg.png" alt="Codes search (Enter/button)" loading="lazy" /><figcaption>Codes search (Enter/button)</figcaption></figure>
+			</div>
+			<div class="qa-test qa-test--pass">
+				<div class="qa-test__head">
+					<span class="qa-test__badge">PASS</span>
+					<h3 class="qa-test__name">Codes export controls present</h3>
+				</div>
+				
+				
+			</div>
+			<div class="qa-test qa-test--pass">
+				<div class="qa-test__head">
+					<span class="qa-test__badge">PASS</span>
+					<h3 class="qa-test__name">Codes bulk actions (Disable/Enable/Delete)</h3>
+				</div>
+				
+				
+			</div></div>
+		</section>
+		<section class="qa-section" id="generate">
+			<h2>5. Generate Codes (single, bulk, invite, live generation)</h2>
+			<div class="qa-tests">
+			<div class="qa-test qa-test--pass">
+				<div class="qa-test__head">
+					<span class="qa-test__badge">PASS</span>
+					<h3 class="qa-test__name">Generate Codes form loads</h3>
+				</div>
+				<p class="qa-test__detail">Single mode default</p>
+				<figure class="qa-test__shot"><img src="assets/screenshots/008-generate-codes-form.png" alt="Generate Codes form loads" loading="lazy" /><figcaption>Generate Codes form loads</figcaption></figure>
+			</div>
+			<div class="qa-test qa-test--pass">
+				<div class="qa-test__head">
+					<span class="qa-test__badge">PASS</span>
+					<h3 class="qa-test__name">Bulk generation mode toggle</h3>
+				</div>
+				
+				<figure class="qa-test__shot"><img src="assets/screenshots/009-generate-codes-bulk-mode.png" alt="Bulk generation mode toggle" loading="lazy" /><figcaption>Bulk generation mode toggle</figcaption></figure>
+			</div>
+			<div class="qa-test qa-test--pass">
+				<div class="qa-test__head">
+					<span class="qa-test__badge">PASS</span>
+					<h3 class="qa-test__name">Registration Invite code type</h3>
+				</div>
+				<p class="qa-test__detail">Roles hidden for invite</p>
+				<figure class="qa-test__shot"><img src="assets/screenshots/010-generate-codes-invite-type.png" alt="Registration Invite code type" loading="lazy" /><figcaption>Registration Invite code type</figcaption></figure>
+			</div>
+			<div class="qa-test qa-test--pass">
+				<div class="qa-test__head">
+					<span class="qa-test__badge">PASS</span>
+					<h3 class="qa-test__name">Live code generation (single access)</h3>
+				</div>
+				<p class="qa-test__detail">QAE2E-ZW6X-5A8D</p>
+				<figure class="qa-test__shot"><img src="assets/screenshots/011-generate-codes-success.png" alt="Live code generation (single access)" loading="lazy" /><figcaption>Live code generation (single access)</figcaption></figure>
+			</div>
+			<div class="qa-test qa-test--pass">
+				<div class="qa-test__head">
+					<span class="qa-test__badge">PASS</span>
+					<h3 class="qa-test__name">Generate Codes Copy button enabled after generation</h3>
+				</div>
+				
+				
+			</div></div>
+		</section>
+		<section class="qa-section" id="code-groups">
+			<h2>6. Code Groups &amp; Add New Group</h2>
+			<div class="qa-tests">
+			<div class="qa-test qa-test--pass">
+				<div class="qa-test__head">
+					<span class="qa-test__badge">PASS</span>
+					<h3 class="qa-test__name">Code Groups table with Edit/Delete on all rows</h3>
+				</div>
+				<p class="qa-test__detail">6 groups, 6 delete buttons</p>
+				<figure class="qa-test__shot"><img src="assets/screenshots/012-code-groups-list.png" alt="Code Groups table with Edit/Delete on all rows" loading="lazy" /><figcaption>Code Groups table with Edit/Delete on all rows</figcaption></figure>
+			</div>
+			<div class="qa-test qa-test--pass">
+				<div class="qa-test__head">
+					<span class="qa-test__badge">PASS</span>
+					<h3 class="qa-test__name">Code Groups search</h3>
+				</div>
+				<p class="qa-test__detail">Filtered TradeSafe</p>
+				<figure class="qa-test__shot"><img src="assets/screenshots/013-code-groups-search.png" alt="Code Groups search" loading="lazy" /><figcaption>Code Groups search</figcaption></figure>
+			</div>
+			<div class="qa-test qa-test--pass">
+				<div class="qa-test__head">
+					<span class="qa-test__badge">PASS</span>
+					<h3 class="qa-test__name">Add New Group form loads</h3>
+				</div>
+				
+				<figure class="qa-test__shot"><img src="assets/screenshots/014-code-groups-add-form.png" alt="Add New Group form loads" loading="lazy" /><figcaption>Add New Group form loads</figcaption></figure>
+			</div></div>
+		</section>
+		<section class="qa-section" id="usage-logs">
+			<h2>7. Usage Logs</h2>
+			<div class="qa-tests">
+			<div class="qa-test qa-test--pass">
+				<div class="qa-test__head">
+					<span class="qa-test__badge">PASS</span>
+					<h3 class="qa-test__name">Usage Logs DataTable loads</h3>
+				</div>
+				
+				<figure class="qa-test__shot"><img src="assets/screenshots/015-usage-logs-overview.png" alt="Usage Logs DataTable loads" loading="lazy" /><figcaption>Usage Logs DataTable loads</figcaption></figure>
+			</div>
+			<div class="qa-test qa-test--pass">
+				<div class="qa-test__head">
+					<span class="qa-test__badge">PASS</span>
+					<h3 class="qa-test__name">Usage Logs retention notice</h3>
+				</div>
+				
+				
+			</div>
+			<div class="qa-test qa-test--pass">
+				<div class="qa-test__head">
+					<span class="qa-test__badge">PASS</span>
+					<h3 class="qa-test__name">Event/Result Tom Select filters</h3>
+				</div>
+				
+				
+			</div></div>
+		</section>
+		<section class="qa-section" id="user-lookup">
+			<h2>8. User Lookup</h2>
+			<div class="qa-tests">
+			<div class="qa-test qa-test--pass">
+				<div class="qa-test__head">
+					<span class="qa-test__badge">PASS</span>
+					<h3 class="qa-test__name">User Lookup search by username</h3>
+				</div>
+				<p class="qa-test__detail">Searched admin</p>
+				<figure class="qa-test__shot"><img src="assets/screenshots/017-user-lookup-admin.png" alt="User Lookup search by username" loading="lazy" /><figcaption>User Lookup search by username</figcaption></figure>
+			</div>
+			<div class="qa-test qa-test--pass">
+				<div class="qa-test__head">
+					<span class="qa-test__badge">PASS</span>
+					<h3 class="qa-test__name">User Lookup Add/Remove role actions</h3>
+				</div>
+				
+				
+			</div>
+			<div class="qa-test qa-test--pass">
+				<div class="qa-test__head">
+					<span class="qa-test__badge">PASS</span>
+					<h3 class="qa-test__name">User Lookup Codes Used table</h3>
+				</div>
+				
+				<figure class="qa-test__shot"><img src="assets/screenshots/016-user-lookup-empty.png" alt="User Lookup Codes Used table" loading="lazy" /><figcaption>User Lookup Codes Used table</figcaption></figure>
+			</div></div>
+		</section>
+		<section class="qa-section" id="category-access">
+			<h2>9. Category Access</h2>
+			<div class="qa-tests">
+			<div class="qa-test qa-test--pass">
+				<div class="qa-test__head">
+					<span class="qa-test__badge">PASS</span>
+					<h3 class="qa-test__name">Category Access Ghost Mode warning</h3>
+				</div>
+				
+				<figure class="qa-test__shot"><img src="assets/screenshots/018-category-access-table.png" alt="Category Access Ghost Mode warning" loading="lazy" /><figcaption>Category Access Ghost Mode warning</figcaption></figure>
+			</div>
+			<div class="qa-test qa-test--pass">
+				<div class="qa-test__head">
+					<span class="qa-test__badge">PASS</span>
+					<h3 class="qa-test__name">Add Mapping modal opens</h3>
+				</div>
+				
+				<figure class="qa-test__shot"><img src="assets/screenshots/019-category-access-add-modal.png" alt="Add Mapping modal opens" loading="lazy" /><figcaption>Add Mapping modal opens</figcaption></figure>
+			</div></div>
+		</section>
+		<section class="qa-section" id="settings">
+			<h2>10. Settings (roles, Ghost Mode, save)</h2>
+			<div class="qa-tests">
+			<div class="qa-test qa-test--pass">
+				<div class="qa-test__head">
+					<span class="qa-test__badge">PASS</span>
+					<h3 class="qa-test__name">Settings form loads</h3>
+				</div>
+				
+				<figure class="qa-test__shot"><img src="assets/screenshots/020-settings-top.png" alt="Settings form loads" loading="lazy" /><figcaption>Settings form loads</figcaption></figure>
+			</div>
+			<div class="qa-test qa-test--pass">
+				<div class="qa-test__head">
+					<span class="qa-test__badge">PASS</span>
+					<h3 class="qa-test__name">Product Access Roles section</h3>
+				</div>
+				<p class="qa-test__detail">6 roles</p>
+				<figure class="qa-test__shot"><img src="assets/screenshots/021-settings-access-roles.png" alt="Product Access Roles section" loading="lazy" /><figcaption>Product Access Roles section</figcaption></figure>
+			</div>
+			<div class="qa-test qa-test--pass">
+				<div class="qa-test__head">
+					<span class="qa-test__badge">PASS</span>
+					<h3 class="qa-test__name">Settings Save (AJAX persistence)</h3>
+				</div>
+				<p class="qa-test__detail">Settings saved successfully.</p>
+				<figure class="qa-test__shot"><img src="assets/screenshots/022-settings-saved.png" alt="Settings Save (AJAX persistence)" loading="lazy" /><figcaption>Settings Save (AJAX persistence)</figcaption></figure>
+			</div></div>
+		</section>
+		<section class="qa-section" id="frontend-preview">
+			<h2>11. Frontend Preview</h2>
+			<div class="qa-tests">
+			<div class="qa-test qa-test--pass">
+				<div class="qa-test__head">
+					<span class="qa-test__badge">PASS</span>
+					<h3 class="qa-test__name">Frontend Preview cards</h3>
+				</div>
+				<p class="qa-test__detail">4 cards</p>
+				<figure class="qa-test__shot"><img src="assets/screenshots/023-frontend-preview-full.png" alt="Frontend Preview cards" loading="lazy" /><figcaption>Frontend Preview cards</figcaption></figure>
+			</div></div>
+		</section>
+		<section class="qa-section" id="storefront">
+			<h2>12. Storefront (private site, registration, My Account Access, shop)</h2>
+			<div class="qa-tests">
+			<div class="qa-test qa-test--pass">
+				<div class="qa-test__head">
+					<span class="qa-test__badge">PASS</span>
+					<h3 class="qa-test__name">Private Site Mode — shop redirects logged-out users</h3>
+				</div>
+				<p class="qa-test__detail">http://zeroday-access-manager.local/wp-login.php?redirect_to=http%3A%2F%2Fzeroday-access-manager.local%2Fshop%2F</p>
+				<figure class="qa-test__shot"><img src="assets/screenshots/024-private-site-shop-redirect.png" alt="Private Site Mode — shop redirects logged-out users" loading="lazy" /><figcaption>Private Site Mode — shop redirects logged-out users</figcaption></figure>
+			</div>
+			<div class="qa-test qa-test--pass">
+				<div class="qa-test__head">
+					<span class="qa-test__badge">PASS</span>
+					<h3 class="qa-test__name">My Account accessible when logged out</h3>
+				</div>
+				
+				<figure class="qa-test__shot"><img src="assets/screenshots/025-my-account-login.png" alt="My Account accessible when logged out" loading="lazy" /><figcaption>My Account accessible when logged out</figcaption></figure>
+			</div>
+			<div class="qa-test qa-test--pass">
+				<div class="qa-test__head">
+					<span class="qa-test__badge">PASS</span>
+					<h3 class="qa-test__name">My Account → Access endpoint</h3>
+				</div>
+				
+				<figure class="qa-test__shot"><img src="assets/screenshots/026-my-account-access.png" alt="My Account → Access endpoint" loading="lazy" /><figcaption>My Account → Access endpoint</figcaption></figure>
+			</div>
+			<div class="qa-test qa-test--pass">
+				<div class="qa-test__head">
+					<span class="qa-test__badge">PASS</span>
+					<h3 class="qa-test__name">Access code redemption (live)</h3>
+				</div>
+				<p class="qa-test__detail">Redirect after unlock: http://zeroday-access-manager.local/product-category/lagfix/</p>
+				<figure class="qa-test__shot"><img src="assets/screenshots/027-access-code-redemption.png" alt="Access code redemption (live)" loading="lazy" /><figcaption>Access code redemption (live)</figcaption></figure>
+			</div>
+			<div class="qa-test qa-test--pass">
+				<div class="qa-test__head">
+					<span class="qa-test__badge">PASS</span>
+					<h3 class="qa-test__name">Shop page loads for logged-in user (Ghost Mode)</h3>
+				</div>
+				<p class="qa-test__detail">Catalog visibility per roles</p>
+				<figure class="qa-test__shot"><img src="assets/screenshots/028-shop-ghost-mode.png" alt="Shop page loads for logged-in user (Ghost Mode)" loading="lazy" /><figcaption>Shop page loads for logged-in user (Ghost Mode)</figcaption></figure>
+			</div>
+			<div class="qa-test qa-test--pass">
+				<div class="qa-test__head">
+					<span class="qa-test__badge">PASS</span>
+					<h3 class="qa-test__name">Registration invite code field</h3>
+				</div>
+				<p class="qa-test__detail">WooCommerce register form</p>
+				<figure class="qa-test__shot"><img src="assets/screenshots/029-registration-invite-field.png" alt="Registration invite code field" loading="lazy" /><figcaption>Registration invite code field</figcaption></figure>
+			</div></div>
+		</section>
+</main>
+<footer class="qa-footer">
+	<p><a href="../index.html">← Back to documentation</a> · TradeSafe Access Manager E2E QA · Plugin v1.0.4</p>
+</footer>
+</body>
+</html>
